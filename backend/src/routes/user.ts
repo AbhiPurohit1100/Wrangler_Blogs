@@ -44,8 +44,7 @@ userRouter.post('/signup' , async (c) =>{
   return c.json({
     "error": "invalid and already exist"
   })
-  }
-  
+  } 
 })
 
 userRouter.post('/signin' ,async (c) => {
@@ -79,7 +78,5 @@ userRouter.post('/signin' ,async (c) => {
   else{
     const jwt = await sign({id: user.id}, c.env.JWT_SECRET)
     return c.json({"jwt": jwt})
-  }
-
-  
+  }  
 })

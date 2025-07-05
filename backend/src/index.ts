@@ -5,7 +5,7 @@ import { PrismaClient } from './generated/prisma/edge'
 import { withAccelerate, WithAccelerateOptions } from '@prisma/extension-accelerate'
 import { sign, decode, verify } from 'hono/jwt'
 import { signinInput,createBlogInput, updateBlogInput} from '@abhiyuck/commonzod2'
-
+import { cors } from 'hono/cors'
 const app = new Hono<{
   Bindings: {
       DATABASE_URL: string;
@@ -13,14 +13,14 @@ const app = new Hono<{
       DIRECT_URL: string
   }
 }>()
-
+app.use("/*", cors())
 app.route("/api/v1/user", userRouter)
 app.route("api/v1/blog", blogRouter)
 
 
 app.use('api/v1/post*', async (c, next)=>{
   const header = c.res.header("Authorization") || "";
-  const token = header.split(" ")[1]
+  const token = header
   const response = await verify(token, c.env.JWT_SECRET)
   if(response.id){
     await next()

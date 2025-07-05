@@ -13,7 +13,7 @@ export const blogRouter = new Hono<{
       userId: string
     }
 }>
-
+//to check for verification in every route of blog
 blogRouter.use('/*', async (c, next) =>{
   const authHeader = c.req.header("Authorization") || ""
   const user = await verify(authHeader,c.env.JWT_SECRET)
@@ -24,13 +24,11 @@ blogRouter.use('/*', async (c, next) =>{
     c.status(403);
     return c.json({
       message: "you're not logged in"
-
     })
-
   }
-  
 });
 
+//for posting 
 blogRouter.post('/' , async (c) =>{
     const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
@@ -63,12 +61,10 @@ blogRouter.post('/' , async (c) =>{
     return ({
         "message": "something went wrong"
     })
-
   }
-
-
 })
 
+//for updating post values
 blogRouter.put('/' , async (c) =>{
     const prisma = new PrismaClient({
     datasourceUrl: c.env.DATABASE_URL,
@@ -101,10 +97,21 @@ blogRouter.get('/bulk' , async (c) =>{
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
-    const blogs = await prisma.post.findMany()
+    const blogs = await prisma.post.findMany({
+      select:{
+        content: true,
+        title: true,
+        id: true,
+        author: {
+          select: {
+            name: true
+          }
+        }
+      }
+    })
 
   return c.json({
-    "allblogs title": blogs
+    "allBlogs": blogs
   })
 })
 
@@ -119,6 +126,17 @@ blogRouter.get('/:id' , async (c) =>{
     const blog = await prisma.post.findFirst({
       where :{
         id: id
+      },
+      select :{
+        id: true,
+        title: true,
+        content: true,
+        createdAt: true,
+        author : {
+          select :{
+            name : true
+          }
+        }
       }
     })
   return c.json({
