@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "../components/ui/button"
-import { PenTool } from "lucide-react"
+
 import { Link } from "react-router-dom"
 export function BlogHero() {
   return (

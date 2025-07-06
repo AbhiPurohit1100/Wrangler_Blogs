@@ -16,12 +16,14 @@ export const Blog = () => {
         <BlogSkeleton/>
         </div>;
     }
-    if (!blog) {
+    if (!blog || blog.length === 0) {
         return <div>Blog not found</div>;
     }
     return (
         <div>
-            <FullBlog blog={blog} />
+            {blog.map((b) => (
+                <FullBlog key={b.id} blog={b} />
+            ))}
         </div>
     );
 }
