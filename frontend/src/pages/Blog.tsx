@@ -1,29 +1,28 @@
-import { BlogSkeleton } from "../components/skeleton";
-import { FullBlog } from "../components/ui/fullBlog"
-import { useBlog } from "../hooks"
 import { useParams } from "react-router-dom"
+import { useBlog } from "../hooks"
+import { FullBlog } from "../components/ui/fullBlog";
+import { BlogSkeleton } from "../components/skeleton";
 
 export const Blog = () => {
     const { id } = useParams();
     const { loading, blog } = useBlog({ id: id || "" });
 
-    if (loading) {
-        return <div><BlogSkeleton />
-        <BlogSkeleton />
-        <BlogSkeleton />
-        <BlogSkeleton />
-        <BlogSkeleton />
-        <BlogSkeleton/>
-        </div>;
+    if (loading || !blog || (Array.isArray(blog) && blog.length === 0)) {
+        return (
+            <div>
+                <BlogSkeleton />
+                <BlogSkeleton />
+                <BlogSkeleton />
+            </div>
+        );
     }
-    if (!blog || blog.length === 0) {
-        return <div>Blog not found</div>;
-    }
+
+    // If blog is an array, use the first item; otherwise, use blog as is
+    const blogData = Array.isArray(blog) ? blog[0] : blog;
+
     return (
         <div>
-            {blog.map((b) => (
-                <FullBlog key={b.id} blog={b} />
-            ))}
+            <FullBlog blog={blogData} />
         </div>
     );
-}
+};

@@ -20,8 +20,8 @@ export const Blogs =() =>{
     return(
         <div>
         <Appbar/>
-        <div className="flex justify-center p-4">
-            <div className="max-w-xl">
+        <div className="flex justify-start w-full pl-80">
+            <div className="grid grid-cols-1 gap-6 max-w-xl pl-1">
             {blogs.slice().reverse().map(blog => <BlogCard
             authorName={blog.author.name || "Anonymous"}
             title={blog.title}

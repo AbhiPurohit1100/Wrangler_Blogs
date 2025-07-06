@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button"
 
 import { Link } from "react-router-dom"
 export function BlogHero() {
+  const isLoggedIn = Boolean(localStorage.getItem("token"));
   return (
     <div className="min-h-screen bg-white text-black">
       {/* Navigation */}
@@ -35,7 +36,7 @@ export function BlogHero() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-20">
             <Button size="lg" className="bg-white text-black hover:bg-gray-100 font-normal px-8 py-3 text-base">
-              <Link to={"/signin"}>Start Writing
+              <Link to={isLoggedIn? "/blogs" : "/signin"}>Start Writing
             </Link></Button>
             
             <Button
@@ -43,7 +44,7 @@ export function BlogHero() {
               variant="outline"
               className="border-gray-600 text-black hover:bg-gray-900 hover:text-white font-normal px-8 py-3 text-base bg-transparent"
             >
-                <Link to={"/signup"}>Start Reading</Link>
+                <Link to={isLoggedIn? "/blogs" : "/signup"}>Start Reading</Link>
               
             </Button>
           </div>
